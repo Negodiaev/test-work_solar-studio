@@ -1,0 +1,33 @@
+.container {
+    padding: 20px;
+    text-align: center;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    margin: 0 auto;
+    vertical-align: middle;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    text-align: center;
+}
+
+tr:not(first-child) {
+    border-top: 1px solid #000;
+}
+
+th {
+    padding: 10px;
+}
+
+td {
+    padding: 5px 10px;
+}
+
+th:not(first-child),
+td:not(first-child) {
+    border-left: 1px solid #000;
+}
