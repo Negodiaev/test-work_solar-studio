@@ -1,6 +1,21 @@
+body {
+    font-family: Tahoma, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+h1 {
+    margin-bottom: 1em;
+}
+
 .container {
     padding: 20px;
     text-align: center;
+}
+
+.filter {
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    min-width: 250px;
 }
 
 .table-container {

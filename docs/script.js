@@ -1,13 +1,15 @@
 var container = document.getElementById('container'),
     createTableButton = document.getElementById('create-table'),
     table = document.createElement('table'),
+    tableBody = document.createElement('tbody'),
     tableHeaders = [
         'Название товара',
         'Цвет',
         'Название размера',
         'Количество доступных товаров этого размера',
         'Цена'
-    ];
+    ],
+    filter = '';
 
 var tableData = {
     '2001': {
@@ -114,7 +116,8 @@ var tableData = {
 };
 
 function createTableHeaders(headers) {
-    var headersRow = '';
+    var tableHeader = document.createElement('thead'),
+        headersRow = '';
 
     if (headers.length) {
         headersRow = document.createElement('tr');
@@ -124,7 +127,8 @@ function createTableHeaders(headers) {
         headersRow.innerHTML += '<th>' + headers[i] + '</th>';
     }
 
-    table.appendChild(headersRow);
+    tableHeader.appendChild(headersRow);
+    table.appendChild(tableHeader);
 }
 
 function createTableCells(obj, isNewRow, currentRow) {
@@ -169,21 +173,66 @@ function createTableCells(obj, isNewRow, currentRow) {
                 cellsRow.innerHTML += '<td>' + obj[key] + '</td>';
             }
 
-            table.appendChild(cellsRow);
+            tableBody.appendChild(cellsRow);
         }
     }
+    table.appendChild(tableBody);
 }
 
 function createTable() {
-    var tableContainer = document.createElement('div');
+    var tableContainer = document.createElement('div'),
+        filter = document.createElement('input');
 
+    filter.setAttribute('type', 'text');
+    filter.setAttribute('id', 'filter');
+    filter.setAttribute('class', 'filter');
+    filter.setAttribute('value', '');
+    filter.setAttribute('placeholder', 'Поиск...');
     tableContainer.setAttribute('class', 'table-container');
 
     createTableHeaders(tableHeaders);
     createTableCells(tableData, true, '');
 
     tableContainer.appendChild(table);
+    container.appendChild(filter);
     container.appendChild(tableContainer);
+
+    filter = document.getElementById('filter');
+
+    function filterTable() {
+        var tableRows = table.getElementsByTagName('tr'),
+            tableRowCells = '',
+            tableRowCell = '',
+            tableRowCellValue = '',
+            filterValue = '';
+
+        if (this.tagName.toLowerCase() === 'input') {
+            filterValue = this.value.trim().toUpperCase();
+        }
+
+        for (var i = 1; i < tableRows.length; i++) {
+            tableRowCells = tableRows[i].getElementsByTagName('td');
+
+            for (var j = 0; j < tableRowCells.length; j++) {
+                tableRowCell = tableRowCells[j];
+
+                if (tableRowCell) {
+                    tableRowCellValue = tableRowCell.textContent || tableRowCell.innerText;
+
+                    if (tableRowCellValue.toUpperCase().indexOf(filterValue) > -1) {
+                        if (filterValue.indexOf('/') < 0 && filterValue.indexOf('-') < 0) {
+                            tableRows[i].style.display = '';
+                            break;
+                        }
+                    } else {
+                        tableRows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+    }
+
+    filter.addEventListener('input', filterTable);
 }
 
 createTableButton.addEventListener('click', function() {
